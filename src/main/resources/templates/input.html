@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Demo Buku</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/webjars/font-awesome/5.13.0/css/all.min.css">
+<link ref="stylesheet" th:src="@{/css/mystyle.css}">
+</head>
+<body>
+
+
+	<div th:replace="fragments/header::header"></div>
+	<div class="container">
+		<h3>Input New Book</h3>
+		<form>
+			<div class="form-group">
+				<label for="exampleInputEmail1">Title</label> <input
+					type="email" class="form-control" name="txtTitle"
+					aria-describedby="emailHelp"> 
+
+			</div>
+			<div class="form-group">
+				<label for="exampleInputEmail1">Description</label> <input
+					type="email" class="form-control" name="txtDescription"
+					aria-describedby="emailHelp"> 
+
+			</div>
+			<div class="form-group">
+				<label for="exampleInputEmail1">Price</label> <input
+					type="email" class="form-control" name="txtPrice"
+					aria-describedby="emailHelp"> 
+
+			</div>
+			<div class="form-group">
+				<label for="exampleInputEmail1">Category</label> <input
+					type="email" class="form-control" id="exampleInputEmail1"
+					aria-describedby="emailHelp"> 
+			</div>
+			
+			<button type="submit" class="btn btn-primary">Insert</button>
+		</form>
+	</div>
+	<div th:replace="fragments/footer::footer"></div>
+
+</body>
+</html>
