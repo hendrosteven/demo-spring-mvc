@@ -19,7 +19,6 @@ public class HomeController {
 	@GetMapping
 	public String index(Model model) {
 		Iterable<Book> listOfBooks = bookRepo.findAll();
-		System.out.println(listOfBooks.iterator());
 		model.addAttribute("listOfBooks", listOfBooks);
 		return "index";
 	}
