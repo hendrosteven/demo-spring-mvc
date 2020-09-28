@@ -1,14 +1,20 @@
 package com.bca.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bca.dto.BookForm;
+import com.bca.dto.ErrorMessage;
 import com.bca.entity.Book;
 import com.bca.services.BookService;
 import com.bca.services.CategoryService;
@@ -31,21 +37,41 @@ public class BookController {
 	}
 	
 	@PostMapping
-	public String save(BookForm bookForm, Model model) {
-		if(bookService.findByCode(bookForm.getCode()) == null) {
-			Book book = new Book();
-			book.setCode(bookForm.getCode());
-			book.setTitle(bookForm.getTitle());
-			book.setDescription(bookForm.getDescription());
-			book.setPrice(bookForm.getPrice());
-			book.setImagePath(bookForm.getImagePath());
-			book.setCategory(categoryService.findById(bookForm.getCategoryId()).get());
-			bookService.save(book);
-			return "redirect:/";
+	public String save(@Valid BookForm bookForm, 
+			BindingResult bindingResult, 
+			Model model,
+			RedirectAttributes redirectAttribute) {
+		
+		if(!bindingResult.hasErrors()) {
+			if(bookService.findByCode(bookForm.getCode()) == null) {
+				Book book = new Book();
+				book.setCode(bookForm.getCode());
+				book.setTitle(bookForm.getTitle());
+				book.setDescription(bookForm.getDescription());
+				book.setPrice(bookForm.getPrice());
+				book.setImagePath(bookForm.getImagePath());
+				book.setCategory(categoryService.findById(bookForm.getCategoryId()).get());
+				bookService.save(book);
+				return "redirect:/";
+			}else {
+				ErrorMessage msg = new ErrorMessage();
+				msg.getMessages().add("Code already used");
+				model.addAttribute("categories", categoryService.findAll());
+				model.addAttribute("bookForm", bookForm);
+				return "input";
+			}
 		}else {
-			//next
+			ErrorMessage msg = new ErrorMessage();
+			for(ObjectError err: bindingResult.getAllErrors()) {
+				msg.getMessages().add(err.getDefaultMessage());
+			}
+			model.addAttribute("categories", categoryService.findAll());
+			model.addAttribute("bookForm", bookForm);
+			model.addAttribute("ERROR", msg);
 			return "input";
 		}
+		
+		
 	}
 	
 	@GetMapping("/edit/{id}")
