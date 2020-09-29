@@ -28,13 +28,13 @@ public class BookService {
 		return bookRepo.findAll();
 	}
 	
-	public List<Book> findAll(int page){
-		Pageable pageable = PageRequest.of(page, 10);
+	public List<Book> findAll(int page, int rows){
+		Pageable pageable = PageRequest.of(page-1, rows);
 		return bookRepo.findAll(pageable).getContent();
 	}
 	
 	public List<Book> findAllByTitle(String title, int page){
-		Pageable pageable = PageRequest.of(page, 10);
+		Pageable pageable = PageRequest.of(page-1, 10);
 		return bookRepo.findAllByTitle(title, pageable);
 	}
 	
