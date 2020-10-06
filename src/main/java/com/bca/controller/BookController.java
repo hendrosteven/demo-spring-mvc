@@ -1,5 +1,6 @@
 package com.bca.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,19 @@ public class BookController {
 	
 	@Autowired
 	private BookService bookService;
+	
+	@Autowired
+	private HttpSession session;
 
 	@GetMapping
 	public String insert(Model model) {
-		model.addAttribute("categories", categoryService.findAll());
-		model.addAttribute("bookForm", new BookForm());
-		return "input";
+		if(session.getAttribute("CURRENT_USER") != null) {
+			model.addAttribute("categories", categoryService.findAll());
+			model.addAttribute("bookForm", new BookForm());
+			return "input";
+		}else {
+			return "redirect:/login";
+		}
 	}
 	
 	@PostMapping

@@ -17,6 +17,9 @@ public class UserService {
 	private UserRepo repo;
 	
 	public User register(User user) throws Exception {
+		
+		System.out.println(user.getEmail()+" "+ user.getPassword());
+		
 		if(repo.findByEmail(user.getEmail())==null) {
 			String hash = MD5Generator.generate(user.getPassword());
 			user.setPassword(hash);
